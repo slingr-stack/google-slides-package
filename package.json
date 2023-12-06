@@ -1,77 +1,80 @@
 {
-    "name": "skeleton",
-    "label": "Skeleton Package",
+    "name": "googleslides",
+    "label": "Google Slides Package",
     "dependencies": [
         {
             "type": "service",
             "name": "http",
             "version": "v1.3.7",
             "instanceId": "shared"
-        },
-        {
-            "type": "package",
-            "name": "oauth",
-            "version": "v1.0.19"
         }
     ],
-    "configurationBuilder": "/configurationBuilder.js",
     "configuration": [
         {
-            "name": "SKELETON_API_BASE_URL",
-            "label": "Skeleton Api Url",
-            "type": "label",
-            "value": "https://example.com/"
+            "name": "serviceAccountEmail",
+            "label": "Service Account Email",
+            "description": "The email from service account created",
+            "type": "text",
+            "required": true
         },
         {
-            "name": "choice",
-            "label": "Choice",
-            "required": false,
-            "defaultValue": "true",
-            "type": "buttonsGroup",
+            "name": "privateKey",
+            "label": "Private Key",
+            "description": "The private key associated to the service account",
+            "type": "password",
+            "required": true
+        },
+        {
+            "label": "Auth Scopes",
+            "name": "authScopes",
+            "description": "The auth scopes the service accounts have, if you select scopes that don't belong to your service account it will lead to authorization errors",
+            "type": "dropDown",
+            "multiplicity": "many",
+            "defaultValue": [
+                "drive"
+            ],
             "typeOptions": {
                 "allowCustom": true,
                 "possibleValues": [
                     {
-                        "label": "True",
-                        "name": "true"
+                        "label": "Drive (Complete access)",
+                        "name": "drive"
                     },
                     {
-                        "label": "False",
-                        "name": "false"
+                        "label": "Drive - File (View and edit any file you can access using your Google Drive)",
+                        "name": "drive.file"
                     },
                     {
-                        "label": "Other",
-                        "name": "other"
+                        "label": "Drive - Readonly (View and download any file you can access using your Google Drive)",
+                        "name": "drive.readonly"
+                    },
+                    {
+                        "label": "Presentations (View and edit your presentations)",
+                        "name": "presentations"
+                    },
+                    {
+                        "label": "Presentations ReadOnly (View your presentations)",
+                        "name": "presentations.readonly"
+                    },
+                    {
+                        "label": "Sheets (View and edit your spreadsheets)",
+                        "name": "spreadsheets"
+                    },
+                    {
+                        "label": "Sheets ReadOnly (View your spreadsheets)",
+                        "name": "spreadsheets.readonly"
                     }
                 ]
             }
         },
         {
-            "name": "text",
-            "label": "Text",
-            "type": "text",
-            "required": "false",
-            "visibility": "config.choice == 'true'"
-        },
-        {
-            "name": "info",
-            "label": "info",
+            "name": "GOOGLESLIDES_API_BASE_URL",
+            "label": "Google Slides Api Url",
             "type": "label",
-            "value": "'info'"
+            "value": "https://slides.googleapis.com/v1"
         }
     ],
-    "events": [
-        {
-            "label": "Webhook",
-            "name": "webhook",
-            "description": "Event triggered when there is a webhook coming from PandaDoc."
-        },
-        {
-            "label": "Callback",
-            "name": "callback",
-            "description": "Happens when a async process is finished"
-        }
-    ],
+    "events": [],
     "metadata": [
         {
             "type": "script",
@@ -79,24 +82,9 @@
             "path": "/scripts/api.js"
         },
         {
-            "type": "listener",
-            "namespace": "webhook",
-            "path": "/listeners/webhook.js"
-        },
-        {
             "type": "flowStep",
-            "namespace": "apiCallSkeleton",
-            "path": "/flowSteps/apiCallSkeleton"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "customFlow",
-            "path": "/flowSteps/customFlow"
-        },
-        {
-            "type": "uiService",
-            "namespace": "testUiService",
-            "path": "/uiServices/testUiService"
+            "namespace": "apiCallGoogleSlides",
+            "path": "/flowSteps/apiCallGoogleSlides"
         }
     ]
 }
