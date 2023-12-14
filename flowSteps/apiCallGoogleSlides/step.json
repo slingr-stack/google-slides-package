@@ -1,8 +1,8 @@
 {
-	"label": "API call to skeleton",
-	"name": "apiCallSkeleton",
+	"label": "API call to Google Slides",
+	"name": "apiCallGoogleSlides",
 	"category": "integrations",
-	"description": "This flow step will send generic request to skeleton.",
+	"description": "This flow step will send generic request to Google Slides.",
 	"inputs": [
 		{
 			"label": "Method",

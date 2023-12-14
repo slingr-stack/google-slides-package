@@ -4,6 +4,8 @@
 
 var httpService = dependencies.http;
 
+var GOOGLEWORKSPACE_API_AUTH_URL = "https://oauth2.googleapis.com/token";
+
 /**
  * This flow step will send generic request.
  *
@@ -20,7 +22,7 @@ var httpService = dependencies.http;
  * {number} connectionTimeout, Read timeout interval, in milliseconds.
  * {number} readTimeout, Connect timeout interval, in milliseconds.
  */
-step.apiCallSkeleton = function (inputs) {
+step.apiCallGoogleSlides = function (inputs) {
 
 	var inputsLogic = {
 		headers: inputs.headers || [],
@@ -118,22 +120,22 @@ function stringToObject (obj) {
 }
 
 function setApiUri(options) {
-	var API_URL = config.get("SKELETON_API_BASE_URL");
-	var url = options.path || "";
+	let API_URL = config.get("GOOGLESLIDES_API_BASE_URL");
+	let url = options.path || "";
 	options.url = API_URL + url;
-	sys.logs.debug('[skeleton] Set url: ' + options.path + "->" + options.url);
+	sys.logs.debug('[googleslides] Set url: ' + options.path + "->" + options.url);
 	return options;
 }
 
 function setRequestHeaders(options) {
-	var headers = options.headers || {};
+	let headers = options.headers || {};
 
-	sys.logs.debug('[skeleton] Set header Bearer');
+	sys.logs.debug('[googleslides] Set header Bearer');
 	headers = mergeJSON(headers, {"Content-Type": "application/json"});
 	headers = mergeJSON(headers, {"Authorization": "Bearer "+getAccessTokenForAccount()});
 
 	if (headers.Accept === undefined || headers.Accept === null || headers.Accept === "") {
-		sys.logs.debug('[skeleton] Set header accept');
+		sys.logs.debug('[googleslides] Set header accept');
 		headers = mergeJSON(headers, {"Accept": "application/json"});
 	}
 
@@ -143,13 +145,13 @@ function setRequestHeaders(options) {
 
 function getAccessTokenForAccount(account) {
 	account = account || "account";
-	sys.logs.info('[skeleton] Getting access token for account: '+account);
-	var installationJson = sys.storage.get('installationInfo-Skeleton---'+account) || {id: null};
-	var token = installationJson.token || null;
-	var expiration = installationJson.expiration || 0;
+	sys.logs.info('[googleslides] Getting access token for account: '+account);
+	let installationJson = sys.storage.get('installationInfo-GoogleSlides---'+account) || {id: null};
+	let token = installationJson.token || null;
+	let expiration = installationJson.expiration || 0;
 	if (!token || expiration < new Date().getTime()) {
-		sys.logs.info('[skeleton] Access token is expired or not found. Getting new token');
-		var res = httpService.post(
+		sys.logs.info('[googleslides] Access token is expired or not found. Getting new token');
+		let res = httpService.post(
 			{
 				url: "https://oauth2.googleapis.com/token",
 				headers: {
@@ -161,26 +163,26 @@ function getAccessTokenForAccount(account) {
 				}
 			});
 		token = res.access_token;
-		var expires_at = res.expires_in;
+		let expires_at = res.expires_in;
 		expiration = new Date(new Date(expires_at) - 1 * 60 * 1000).getTime();
 		installationJson = mergeJSON(installationJson, {"token": token, "expiration": expiration});
-		sys.logs.info('[skeleton] Saving new token for account: ' + account);
-		sys.storage.replace('installationInfo-Skeleton---'+account, installationJson);
+		sys.logs.info('[googleslides] Saving new token for account: ' + account);
+		sys.storage.replace('installationInfo-GoogleSlides---'+account, installationJson);
 	}
 	return token;
 }
 
 function getJsonWebToken() {
-	var currentTime = new Date().getTime();
-	var futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
-	var scopeProp= config.get("scope");
-	var scopes;
+	let currentTime = new Date().getTime();
+	let futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
+	let scopeProp= config.get("scope");
+	let scopes;
 	if (!!scopeProp) {
 		scopes = scopeProp.map(function (s) {
 			return "https://www.googleapis.com/auth/" + s;
 		});
 	}
-	var scopesGlobal = scopes.join(" ");
+	let scopesGlobal = scopes.join(" ");
 	return sys.utils.crypto.jwt.generate(
 		{
 			iss: config.get("serviceAccountEmail"),
