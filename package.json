@@ -25,47 +25,11 @@
             "required": true
         },
         {
-            "label": "Auth Scopes",
-            "name": "authScopes",
-            "description": "The auth scopes the service accounts have, if you select scopes that don't belong to your service account it will lead to authorization errors",
-            "type": "dropDown",
-            "multiplicity": "many",
-            "defaultValue": [
-                "drive"
-            ],
-            "typeOptions": {
-                "allowCustom": true,
-                "possibleValues": [
-                    {
-                        "label": "Drive (Complete access)",
-                        "name": "drive"
-                    },
-                    {
-                        "label": "Drive - File (View and edit any file you can access using your Google Drive)",
-                        "name": "drive.file"
-                    },
-                    {
-                        "label": "Drive - Readonly (View and download any file you can access using your Google Drive)",
-                        "name": "drive.readonly"
-                    },
-                    {
-                        "label": "Presentations (View and edit your presentations)",
-                        "name": "presentations"
-                    },
-                    {
-                        "label": "Presentations ReadOnly (View your presentations)",
-                        "name": "presentations.readonly"
-                    },
-                    {
-                        "label": "Sheets (View and edit your spreadsheets)",
-                        "name": "spreadsheets"
-                    },
-                    {
-                        "label": "Sheets ReadOnly (View your spreadsheets)",
-                        "name": "spreadsheets.readonly"
-                    }
-                ]
-            }
+            "label": "Scope",
+            "name": "scope",
+            "description": "The scope of access you are requesting, which may include multiple space-separated values.",
+            "required": "true",
+            "type": "text"
         },
         {
             "name": "GOOGLESLIDES_API_BASE_URL",
