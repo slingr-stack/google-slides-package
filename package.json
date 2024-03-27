@@ -5,24 +5,30 @@
         {
             "type": "service",
             "name": "http",
-            "version": "v1.3.7",
+            "version": "v1.5.3",
             "instanceId": "shared"
-        }
-    ],
-    "configuration": [
-        {
-            "name": "serviceAccountEmail",
-            "label": "Service Account Email",
-            "description": "The email from service account created",
-            "type": "text",
-            "required": true
         },
         {
-            "name": "privateKey",
-            "label": "Private Key",
-            "description": "The private key associated to the service account",
-            "type": "password",
-            "required": true
+            "type": "package",
+            "name": "oauth",
+            "version": "v1.0.24"
+        }
+    ],
+    "configurationBuilder": "/configurationBuilder.js",
+    "configuration": [
+        {
+            "label": "Client Id",
+            "name": "clientId",
+            "description": "The ID for your client application registered with the API provider.",
+            "required": "true",
+            "type": "text"
+        },
+        {
+            "label": "Client Secret",
+            "name": "clientSecret",
+            "description": "The client secret given to you by the API provider",
+            "required": "true",
+            "type": "text"
         },
         {
             "label": "Scope",
@@ -30,6 +36,26 @@
             "description": "The scope of access you are requesting, which may include multiple space-separated values.",
             "required": "true",
             "type": "text"
+        },
+        {
+            "label": "State",
+            "name": "state",
+            "description": "An opaque value to prevent cross-site request forgery.",
+            "type": "text"
+        },
+        {
+            "name": "oauthCallback",
+            "label": "OAuth callback",
+            "description": "The OAuth callback to configure in your Google Drive App",
+            "type": "label",
+            "value": "config.AUTH_CALLBACK_URL+'/authCallback'"
+        },
+        {
+            "name": "webhooksUrl",
+            "label": "Webhooks URL",
+            "description": "The URL to configure in webhooks of your Google Drive App",
+            "type": "label",
+            "value": "config.WEBHOOK_URL"
         },
         {
             "name": "GOOGLESLIDES_API_BASE_URL",

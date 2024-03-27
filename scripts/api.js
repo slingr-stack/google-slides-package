@@ -25,6 +25,8 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
         return requestFn(options, callbackData, callbacks);
     } catch (error) {
         sys.logs.info("[googleslides] Handling request..."+ JSON.stringify(error));
+        dependencies.oauth.functions.refreshToken('googleslides:refreshToken');
+        return requestFn(setAuthorization(options), callbackData, callbacks);
     }
 }
 
@@ -36,6 +38,26 @@ function createWrapperFunction(requestFn) {
 
 for (let key in httpDependency) {
     if (typeof httpDependency[key] === 'function') httpService[key] = createWrapperFunction(httpDependency[key]);
+}
+
+/**
+ * Retrieves the access token.
+ *
+ * @return {void} The access token refreshed on the storage.
+ */
+exports.getAccessToken = function () {
+    sys.logs.info("[googleslides] Getting access token from oauth");
+    return dependencies.oauth.functions.connectUser('googleslides:userConnected');
+}
+
+/**
+ * Removes the access token from the oauth.
+ *
+ * @return {void} The access token removed on the storage.
+ */
+exports.removeAccessToken = function () {
+    sys.logs.info("[googleslides] Removing access token from oauth");
+    return dependencies.oauth.functions.disconnectUser('googleslides:disconnectUser');
 }
 
 /****************************************************
@@ -236,12 +258,6 @@ function isObject (obj) {
 let stringType = Function.prototype.call.bind(Object.prototype.toString)
 
 /****************************************************
- Constants
- ****************************************************/
-
-const GOOGLEWORKSPACE_API_AUTH_URL = "https://oauth2.googleapis.com/token";
-
-/****************************************************
  Configurator
  ****************************************************/
 
@@ -249,6 +265,7 @@ let GoogleSlides = function (options) {
     options = options || {};
     options= setApiUri(options);
     options= setRequestHeaders(options);
+    options = setAuthorization(options);
     return options;
 }
 
@@ -266,64 +283,22 @@ function setApiUri(options) {
 
 function setRequestHeaders(options) {
     let headers = options.headers || {};
-
-    sys.logs.debug('[googleslides] Set header Bearer');
     headers = mergeJSON(headers, {"Content-Type": "application/json"});
-    headers = mergeJSON(headers, {"Authorization": "Bearer "+getAccessTokenForAccount()});
-
-    if (headers.Accept === undefined || headers.Accept === null || headers.Accept === "") {
-        sys.logs.debug('[googleslides] Set header accept');
-        headers = mergeJSON(headers, {"Accept": "application/json"});
-    }
-
     options.headers = headers;
     return options;
 }
 
-function getAccessTokenForAccount(account) {
-    account = account || "account";
-    sys.logs.info('[googleslides] Getting access token for account: '+account);
-    let installationJson = sys.storage.get('installationInfo-GoogleSlides---'+account) || {id: null};
-    let token = installationJson.token || null;
-    let expiration = installationJson.expiration || 0;
-    if (!token || expiration < new Date().getTime()) {
-        sys.logs.info('[googleslides] Access token is expired or not found. Getting new token');
-        let res = httpService.post(
-            {
-                url: "https://oauth2.googleapis.com/token",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: {
-                    grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    assertion: getJsonWebToken()
-                }
-            });
-        token = res.access_token;
-        let expires_at = res.expires_in;
-        expiration = new Date(new Date(expires_at) - 1 * 60 * 1000).getTime();
-        installationJson = mergeJSON(installationJson, {"token": token, "expiration": expiration});
-        sys.logs.info('[googleslides] Saving new token for account: ' + account);
-        sys.storage.replace('installationInfo-GoogleSlides---'+account, installationJson);
-    }
-    return token;
-}
-
-function getJsonWebToken() {
-    let currentTime = new Date().getTime();
-    let futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
-    let scopesGlobal = config.get("scope");
-    return sys.utils.crypto.jwt.generate(
-        {
-            iss: config.get("serviceAccountEmail"),
-            aud: GOOGLEWORKSPACE_API_AUTH_URL,
-            scope: scopesGlobal,
-            iat: currentTime,
-            exp: futureTime
-        },
-        config.get("privateKey"),
-        "RS256"
-    )
+function setAuthorization(options) {
+    let authorization = options.authorization || {};
+    sys.logs.debug('[googleslides] setting authorization');
+    authorization = mergeJSON(authorization, {
+        type: "oauth2",
+        accessToken: sys.storage.get(
+            'installationInfo-googleslides-User-'+sys.context.getCurrentUserRecord().id() + ' - access_token',{decrypt:true}),
+        headerPrefix: "Bearer"
+    });
+    options.authorization = authorization;
+    return options;
 }
 
 function mergeJSON (json1, json2) {
