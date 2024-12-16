@@ -1,17 +1,17 @@
 {
     "name": "googleslides",
-    "label": "Google Slides Package",
+    "label": "Google Slides",
     "dependencies": [
         {
             "type": "service",
             "name": "http",
-            "version": "v1.5.3",
+            "version": "v1.7.0",
             "instanceId": "shared"
         },
         {
             "type": "package",
             "name": "oauth",
-            "version": "v1.0.24"
+            "version": "v1.0.33"
         }
     ],
     "configurationBuilder": "/configurationBuilder.js",
