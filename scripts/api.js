@@ -211,13 +211,7 @@ function getJsonWebToken() {
     try{
         let currentTime = new Date().getTime();
         let futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
-        let scopeProp= config.get("scope");
-        let scopes;
-        if (!!scopeProp) {
-            scopes = scopeProp.map(function (s) {
-                return "https://www.googleapis.com/auth/admin." + s;
-            });
-        }
+        let scopes = config.get("scope");
         let scopesGlobal = scopes.join(" ");
         return sys.utils.crypto.jwt.generate(
             {
