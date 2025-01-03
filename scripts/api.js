@@ -208,7 +208,7 @@ function getAccessTokenForAccount(account) {
         expiration = new Date(new Date(expires_at) - 1 * 60 * 1000).getTime();
         installationJson = mergeJSON(installationJson, {"token": token, "expiration": expiration});
         sys.logs.info('[googleslides] Saving new token for account: ' + account);
-        sys.storage.replace('installationInfo-googleslides---'+account, installationJson);
+        sys.storage.put('installationInfo-googleslides---'+account, installationJson);
     }
     return token;
 }
@@ -218,14 +218,6 @@ function getJsonWebToken() {
         let currentTime = new Date().getTime();
         let futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
         let scopes = config.get("scope");
-        sys.logs.error("debugging options to generate JWT" + JSON.stringify(  {
-            iss: config.get("serviceAccountEmail"),
-            aud: config.get("GOOGLESLIDES_API_BASE_URL"),
-            scope: scopes,
-            iat: currentTime,
-            exp: futureTime,
-            privateKey: config.get("privateKey")
-        }));
         return sys.utils.crypto.jwt.generate(
             {
                 iss: config.get("serviceAccountEmail"),
