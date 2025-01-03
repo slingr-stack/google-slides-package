@@ -44,9 +44,9 @@ for (let key in httpDependency) {
  */
 exports.getAccessToken = function () {
     sys.logs.info("[googleslides] Getting access token from oauth");
-    if (authMethod === "oAuth2") {
+    if (config.get("authenticationMethod") === "oAuth2") {
         return dependencies.oauth.functions.connectUser("googleslides:userConnected");
-    } else if (authMethod === "jwt") {
+    } else if (config.get("authenticationMethod") === "jwt") {
         return getAccessTokenForAccount();
     }
 }
@@ -233,7 +233,6 @@ function getJsonWebToken() {
         );
     } catch (error) {
         sys.logs.error("[googleslides] Error generating JWT: ", error);
-        throw new Error("[googleslides] Failed to generate JWT.");
     }
 }
 
