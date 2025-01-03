@@ -89,7 +89,7 @@ for more information about generic requests.
 There are no events for this package.
 
 ## Dependencies
-* HTTP Service (Latest Version)
+* HTTP Service
 * OAuth (Latest Version)
 
 # About Slingr
