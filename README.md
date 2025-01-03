@@ -89,8 +89,8 @@ for more information about generic requests.
 There are no events for this package.
 
 ## Dependencies
-* HTTP Service (Latest Version)
-* OAuth (Latest Version)
+* HTTP Service
+* OAuth Package
 
 # About Slingr
 

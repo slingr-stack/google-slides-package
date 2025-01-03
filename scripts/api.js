@@ -20,7 +20,7 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
         return requestFn(options, callbackData, callbacks);
     } catch (error) {
         sys.logs.info("[googleslides] Handling request..."+ JSON.stringify(error));
-        if (config.get("authenticationMethod") == "oAuth2") {
+        if (config.get("authenticationMethod") === "oAuth2") {
             dependencies.oauth.functions.refreshToken('googleslides:refreshToken');
             return requestFn(setAuthorization(options), callbackData, callbacks);
         }
