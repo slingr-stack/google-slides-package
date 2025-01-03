@@ -213,6 +213,14 @@ function getJsonWebToken() {
         let futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
         let scopes = config.get("scope");
         let scopesGlobal = scopes.join(" ");
+        sys.logs.error("debugging options to generate JWT" + JSON.stringify(  {
+            iss: config.get("serviceAccountEmail"),
+            aud: config.get("GOOGLESLIDES_API_BASE_URL"),
+            scope: scopesGlobal,
+            iat: currentTime,
+            exp: futureTime,
+            privateKey: config.get("privateKey")
+        }));
         return sys.utils.crypto.jwt.generate(
             {
                 iss: config.get("serviceAccountEmail"),
@@ -225,7 +233,7 @@ function getJsonWebToken() {
             "RS256"
         );
     } catch (error) {
-        sys.logs.error("[googleslides] Error generating JWT: " + JSON.stringify(error));
+        sys.logs.error("[googleslides] Error generating JWT: ", error);
         throw new Error("[googleslides] Failed to generate JWT.");
     }
 }
