@@ -212,11 +212,10 @@ function getJsonWebToken() {
         let currentTime = new Date().getTime();
         let futureTime = new Date(currentTime + ( 10 * 60 * 1000)).getTime();
         let scopes = config.get("scope");
-        let scopesGlobal = scopes.join(" ");
         sys.logs.error("debugging options to generate JWT" + JSON.stringify(  {
             iss: config.get("serviceAccountEmail"),
             aud: config.get("GOOGLESLIDES_API_BASE_URL"),
-            scope: scopesGlobal,
+            scope: scopes,
             iat: currentTime,
             exp: futureTime,
             privateKey: config.get("privateKey")
@@ -225,7 +224,7 @@ function getJsonWebToken() {
             {
                 iss: config.get("serviceAccountEmail"),
                 aud: config.get("GOOGLESLIDES_API_BASE_URL"),
-                scope: scopesGlobal,
+                scope: scopes,
                 iat: currentTime,
                 exp: futureTime
             },
