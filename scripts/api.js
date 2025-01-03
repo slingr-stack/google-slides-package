@@ -188,6 +188,7 @@ function getAccessTokenForAccount(account) {
     account = account || "account";
     sys.logs.info('[googleslides] Getting access token for account: '+account);
     let installationJson = sys.storage.get('installationInfo-googleslides---'+account) || {id: null};
+    sys.logs.warn(JSON.stringify(sys.storage.get('installationInfo-googleslides---'+account)));
     let token = installationJson.token || null;
     let expiration = installationJson.expiration || 0;
     if (!!token || expiration < new Date()) {
