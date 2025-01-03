@@ -90,7 +90,7 @@ There are no events for this package.
 
 ## Dependencies
 * HTTP Service
-* OAuth (Latest Version)
+* OAuth Package
 
 # About Slingr
 
