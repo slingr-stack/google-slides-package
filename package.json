@@ -17,18 +17,56 @@
     "configurationBuilder": "/configurationBuilder.js",
     "configuration": [
         {
+            "name": "authenticationMethod",
+            "label": "Authentication Method",
+            "required": true,
+            "defaultValue": "oAuth2",
+            "type": "buttonsGroup",
+            "typeOptions": {
+                "allowCustom": false,
+                "possibleValues": [
+                    {
+                        "label": "JWT",
+                        "name": "jwt"
+                    },
+                    {
+                        "label": "OAuth 2.0",
+                        "name": "oAuth2"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "serviceAccountEmail",
+            "label": "Service Account Email",
+            "type": "text",
+            "description": "The email from service account created.",
+            "required": "config.authenticationMethod == 'jwt'",
+            "visibility": "config.authenticationMethod == 'jwt'"
+        },
+        {
+            "label": "Private key",
+            "name": "privateKey",
+            "description": "The private key associated to the service account.",
+            "required": "config.authenticationMethod == 'jwt'",
+            "type": "password",
+            "visibility": "config.authenticationMethod == 'jwt'"
+        },
+        {
             "label": "Client Id",
             "name": "clientId",
             "description": "The ID for your client application registered with the API provider.",
             "required": "true",
-            "type": "text"
+            "type": "text",
+            "visibility": "config.authenticationMethod == 'oAuth2'"
         },
         {
             "label": "Client Secret",
             "name": "clientSecret",
             "description": "The client secret given to you by the API provider",
-            "required": "true",
-            "type": "text"
+            "required": "config.authenticationMethod == 'oAuth2'",
+            "type": "text",
+            "visibility": "config.authenticationMethod == 'oAuth2'"
         },
         {
             "label": "Scope",
@@ -51,13 +89,6 @@
             "value": "config.AUTH_CALLBACK_URL+'/authCallback'"
         },
         {
-            "name": "webhooksUrl",
-            "label": "Webhooks URL",
-            "description": "The URL to configure in webhooks of your Google Drive App",
-            "type": "label",
-            "value": "config.WEBHOOK_URL"
-        },
-        {
             "name": "GOOGLESLIDES_API_BASE_URL",
             "label": "Google Slides Api Url",
             "type": "label",
@@ -70,11 +101,6 @@
             "type": "script",
             "namespace": "api",
             "path": "/scripts/api.js"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "apiCallGoogleSlides",
-            "path": "/flowSteps/apiCallGoogleSlides"
         }
     ]
 }
