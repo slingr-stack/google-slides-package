@@ -130,6 +130,12 @@ function isObject (obj) {
 let stringType = Function.prototype.call.bind(Object.prototype.toString)
 
 /****************************************************
+ Constants
+ ****************************************************/
+
+const GOOGLEWORKSPACE_API_AUTH_URL = "https://oauth2.googleapis.com/token";
+
+/****************************************************
  Configurator
  ****************************************************/
 
@@ -223,7 +229,7 @@ function getJsonWebToken() {
         return sys.utils.crypto.jwt.generate(
             {
                 iss: config.get("serviceAccountEmail"),
-                aud: config.get("GOOGLESLIDES_API_BASE_URL"),
+                aud: GOOGLEWORKSPACE_API_AUTH_URL,
                 scope: scopes,
                 iat: currentTime,
                 exp: futureTime
