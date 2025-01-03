@@ -206,7 +206,7 @@ function getAccessTokenForAccount(account) {
             });
         token = res.access_token;
         let expires_at = res.expires_in;
-        expiration = new Date(new Date(expires_at) - 1 * 60 * 1000).getTime();
+        expiration = new Date(expires_at * 1000 - 1 * 60 * 1000).getTime();
         installationJson = mergeJSON(installationJson, {"token": token, "expiration": expiration});
         sys.logs.info('[googleslides] Saving new token for account: ' + account);
         sys.storage.put('installationInfo-googleslides---'+account, installationJson);
