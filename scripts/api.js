@@ -190,7 +190,7 @@ function getAccessTokenForAccount(account) {
     let installationJson = sys.storage.get('installationInfo-googleslides---'+account) || {id: null};
     sys.logs.warn(JSON.stringify(sys.storage.get('installationInfo-googleslides---'+account)));
     let token = installationJson.token || null;
-    let expiration = installationJson.expiration || 0;
+    let expiration = (installationJson.expiration * 1000 + new Date().getTime()) || 0;
     if (!!token || expiration < new Date()) {
         sys.logs.info('[googleslides] Access token is expired or not found. Getting new token');
         let res = httpService.post(
