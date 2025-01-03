@@ -180,7 +180,7 @@ function setAuthorization(options) {
         return options;
     } else {
         options.headers = mergeJSON(options.headers, {"Authorization": "Bearer "+getAccessTokenForAccount()});
-
+        return options;
     }
 }
 
