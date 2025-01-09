@@ -41,16 +41,16 @@
             "label": "Service Account Email",
             "type": "text",
             "description": "The email from service account created.",
-            "required": "config.authenticationMethod == 'jwt'",
-            "visibility": "config.authenticationMethod == 'jwt'"
+            "required": "config.authenticationMethod == 'serviceAccount'",
+            "visibility": "config.authenticationMethod == 'serviceAccount'"
         },
         {
             "label": "Private key",
             "name": "privateKey",
             "description": "The private key associated to the service account.",
-            "required": "config.authenticationMethod == 'jwt'",
+            "required": "config.authenticationMethod == 'serviceAccount'",
             "type": "password",
-            "visibility": "config.authenticationMethod == 'jwt'"
+            "visibility": "config.authenticationMethod == 'serviceAccount'"
         },
         {
             "label": "Client Id",
