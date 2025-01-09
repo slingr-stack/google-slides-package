@@ -20,10 +20,17 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
         return requestFn(options, callbackData, callbacks);
     } catch (error) {
         sys.logs.info("[googleslides] Handling request..."+ JSON.stringify(error));
-        if (config.get("authenticationMethod") === "oAuth2") {
-            dependencies.oauth.functions.refreshToken('googleslides:refreshToken');
+        if (error.additionalInfo.status === 401) {
+            if (config.get("authorizationMethod") === 'oAuth2') {
+                dependencies.oauth.functions.refreshToken('googleslides:refreshToken');
+            } else {
+                getAccessTokenForAccount(); // this will attempt to get a new access_token in case it has expired
+            }
             return requestFn(setAuthorization(options), callbackData, callbacks);
+        } else {
+            throw error;
         }
+
     }
 }
 
@@ -43,10 +50,10 @@ for (let key in httpDependency) {
  * @return {void} The access token refreshed on the storage.
  */
 exports.getAccessToken = function () {
-    sys.logs.info("[googleslides] Getting access token from oauth");
+    sys.logs.info("[googleslides] Getting access token");
     if (config.get("authenticationMethod") === "oAuth2") {
         return dependencies.oauth.functions.connectUser("googleslides:userConnected");
-    } else if (config.get("authenticationMethod") === "jwt") {
+    } else if (config.get("authenticationMethod") === "serviceAccount") {
         return getAccessTokenForAccount();
     }
 }
@@ -61,7 +68,7 @@ exports.removeAccessToken = function () {
         sys.logs.info("[googleslides] Removing access token from oauth");
         return dependencies.oauth.functions.disconnectUser("googleslides:disconnectUser");
     } else {
-        sys.logs.warn("[googleslides] JWT does not support token removal.");
+        sys.storage.remove('installationInfo-googleslides---'+  sys.context.getCurrentUserRecord().id());
     }
 }
 
@@ -168,7 +175,7 @@ function setRequestHeaders(options) {
 
 function setAuthorization(options) {
     sys.logs.debug('[googleslides] setting authorization');
-    if (config.get("authenticationMethod") == "oAuth2") {
+    if (config.get("authenticationMethod") === "oAuth2") {
         let authorization = options.authorization || {};
         authorization = mergeJSON(authorization, {
             type: "oauth2",
@@ -179,15 +186,14 @@ function setAuthorization(options) {
         options.authorization = authorization;
         return options;
     } else {
-        options.headers = mergeJSON(options.headers, {"Authorization": "Bearer "+getAccessTokenForAccount()});
+        options.headers = mergeJSON(options.headers, {"Authorization": "Bearer " + getAccessTokenForAccount()});
         return options;
     }
 }
 
-function getAccessTokenForAccount(account) {
-    account = account || "account";
-    sys.logs.info('[googleslides] Getting access token for account: '+account);
-    let installationJson = sys.storage.get('installationInfo-googleslides---'+account) || {id: null};
+function getAccessTokenForAccount() {
+    sys.logs.info('[googleslides] Getting access token for account: '+ sys.context.getCurrentUserRecord().id());
+    let installationJson = sys.storage.get('installationInfo-googleslides---'+  sys.context.getCurrentUserRecord().id()) || {id: null};
     let token = installationJson.token || null;
     let expiration = (installationJson.expiration * 1000 + new Date().getTime()) || 0;
     if (!token || expiration < new Date()) {
@@ -208,7 +214,7 @@ function getAccessTokenForAccount(account) {
         expiration = expires_at * 1000 +  + new Date().getTime();
         installationJson = mergeJSON(installationJson, {"token": token, "expiration": expiration});
         sys.logs.info('[googleslides] Saving new token for account: ' + account);
-        sys.storage.put('installationInfo-googleslides---'+account, installationJson);
+        sys.storage.put('installationInfo-googleslides---'+  sys.context.getCurrentUserRecord().id(), installationJson);
     }
     return token;
 }

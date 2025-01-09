@@ -26,8 +26,8 @@
                 "allowCustom": false,
                 "possibleValues": [
                     {
-                        "label": "JWT",
-                        "name": "jwt"
+                        "label": "Service Account",
+                        "name": "serviceAccount"
                     },
                     {
                         "label": "OAuth 2.0",
@@ -73,12 +73,6 @@
             "name": "scope",
             "description": "The scope of access you are requesting, which may include multiple space-separated values.",
             "required": "true",
-            "type": "text"
-        },
-        {
-            "label": "State",
-            "name": "state",
-            "description": "An opaque value to prevent cross-site request forgery.",
             "type": "text"
         },
         {

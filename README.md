@@ -17,42 +17,57 @@ by following these instructions:
 
 - Create a Google Cloud project for your Google Slides app.
 - Enable the Slides API in your Google Cloud project. 
-- Download the JSON file with the service account credentials to get the service account private key if using **JWT** authentication.
+- Download the JSON file with the service account credentials to get the service account private key if using **Service Account** authentication.
 - For **OAuth 2.0** authentication, create OAuth 2.0 credentials and obtain the **Client ID** and **Client Secret**.
 
 ### Authentication Method
-You can choose between two authentication methods for your application:
-- **JWT** (JSON Web Token): This method uses a service account for authentication, you will need the Service Account Email, the Private Key and scope of access.
-- **OAuth 2.0**: This method uses OAuth authentication, where you'll need the Client ID, Client Secret,
+You can choose between two authentication methods for your application.
+
+**Name**: `authenticationMethod`
+**Type**: buttonsGroup
+**Mandatory**: true
 
 ### Service account email
 
 As explained above, this value comes from the credential file.
 
+**Name**: `serviceAccountEmail`
+**Type**: text
+**Mandatory**: true
+
 ### Private Key
 
 As explained above, this value also comes from the credentials file.
+
+**Name**: `privateKey`
+**Type**: password
+**Mandatory**: true
 
 ### Client ID
 
 The Client ID for your OAuth 2.0 application.
 
+**Name**: `clientId`
+**Type**: text
+**Mandatory**: true
+
 ### Client Secret
 The Client Secret given by the API provider.
 
-### OAuth Scopes
+**Name**: `clientSecret`
+**Type**: password
+**Mandatory**: true
 
-The scopes the service account have access to. 
-Take into account 
-if any scope is selected to which the service account does not have access, 
-the package will fail to be authorized to make any requests.
+###  Scopes
+
+Note that the client must have access to the slides resources. If you try to access to a resource that the user does not own
+the request will result in a 404 or 403 unauthorized error.
 
 ### Configuration Parameters
 Field names to use the parameters with configuration.
 
 **Client Id (clientId)** - Text<br>
 **Client Secret (clientSecret)** - Text<br>
-**State (state)** - Text<br>
 **Service Account Email (serviceAccountEmail)** - Text<br>
 **Private Key (privateKey)** - Text<br>
 **Scope (scope)** - Text
@@ -64,17 +79,18 @@ The Google Slides package allows the application runtime to request a refresh to
 pkg.googleslides.api.getAccessToken();
 ```
 
-the Google service must return an object with the access token and the refresh token. For each of these tokens a record will be created in the app storage (accessible from the Monitor),
-and you will be able to see them encrypted and associated to a user by id.
+This will return the access token, which will be securely stored in the application's storage and associated with a user by their ID.
+
+If you have enabled the `OAuth 2.0` authentication method, the same method is used. The difference is that the Google Slides package includes the `&access_type=offline` parameter, which allows the application to request a refresh token. This happens when calling the UI service (which should run during runtime, for example, by invoking the method within an action) to log in to the application.
+
+The Google service will return an object containing both the access token and the refresh token. Each token will be stored in the app's storage (accessible via the Monitor), where you can view them encrypted and associated with the user by ID.
 
 # Javascript API
 
-The Javascript API of the googleslides package has two pieces:
-
-- **HTTP requests**
+You can make `GET`,`POST`, requests to the [Google Slides API](https://developers.google.com/slides/api/reference/rest) like this:
 
 ## HTTP requests
-You can make `GET`,`POST` requests to the [googleslides API](https://developers.google.com/slides/api/reference/rest) like this:
+You can make `GET`,`POST` requests to the [Google Slides API](https://developers.google.com/slides/api/reference/rest) like this:
 ```javascript
 var response = pkg.googleslides.api.get('/presentations/:presentationId')
 var response = pkg.googleslides.api.post('/presentations', body)
