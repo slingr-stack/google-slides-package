@@ -21,7 +21,7 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
     } catch (error) {
         sys.logs.info("[googleslides] Handling request..."+ JSON.stringify(error));
         if (error.additionalInfo.status === 401) {
-            if (config.get("authorizationMethod") === 'oAuth2') {
+            if (config.get("authenticationMethod") === 'oAuth2') {
                 dependencies.oauth.functions.refreshToken('googleslides:refreshToken');
             } else {
                 getAccessTokenForAccount(); // this will attempt to get a new access_token in case it has expired
