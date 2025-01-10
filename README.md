@@ -3,7 +3,7 @@
 
 This package allows direct access to the Google Slides API through a service account.
 It also provides shortcuts and helpers for the most common use cases.
-
+Repo: https://github.com/slingr-stack/google-slides-package/
 
 Some features available in this package are:
 
@@ -20,14 +20,14 @@ by following these instructions:
 - Download the JSON file with the service account credentials to get the service account private key if using **Service Account** authentication.
 - For **OAuth 2.0** authentication, create OAuth 2.0 credentials and obtain the **Client ID** and **Client Secret**.
 
-### Authentication Method
+#### Authentication Method
 You can choose between two authentication methods for your application.
 
 **Name**: `authenticationMethod`
 **Type**: buttonsGroup
 **Mandatory**: true
 
-### Service account email
+#### Service account email
 
 As explained above, this value comes from the credential file.
 
@@ -35,7 +35,7 @@ As explained above, this value comes from the credential file.
 **Type**: text
 **Mandatory**: true
 
-### Private Key
+#### Private Key
 
 As explained above, this value also comes from the credentials file.
 
@@ -43,7 +43,7 @@ As explained above, this value also comes from the credentials file.
 **Type**: password
 **Mandatory**: true
 
-### Client ID
+#### Client ID
 
 The Client ID for your OAuth 2.0 application.
 
@@ -51,14 +51,14 @@ The Client ID for your OAuth 2.0 application.
 **Type**: text
 **Mandatory**: true
 
-### Client Secret
+#### Client Secret
 The Client Secret given by the API provider.
 
 **Name**: `clientSecret`
 **Type**: password
 **Mandatory**: true
 
-###  Scopes
+####  Scopes
 
 Note that the client must have access to the slides resources. If you try to access to a resource that the user does not own
 the request will result in a 404 or 403 unauthorized error.
@@ -86,8 +86,6 @@ If you have enabled the `OAuth 2.0` authentication method, the same method is us
 The Google service will return an object containing both the access token and the refresh token. Each token will be stored in the app's storage (accessible via the Monitor), where you can view them encrypted and associated with the user by ID.
 
 # Javascript API
-
-You can make `GET`,`POST`, requests to the [Google Slides API](https://developers.google.com/slides/api/reference/rest) like this:
 
 ## HTTP requests
 You can make `GET`,`POST` requests to the [Google Slides API](https://developers.google.com/slides/api/reference/rest) like this:
