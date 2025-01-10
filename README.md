@@ -3,6 +3,7 @@
 
 This package allows direct access to the Google Slides API through a service account.
 It also provides shortcuts and helpers for the most common use cases.
+
 Repo: https://github.com/slingr-stack/google-slides-package/
 
 Some features available in this package are:
