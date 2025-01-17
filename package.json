@@ -5,8 +5,7 @@
         {
             "type": "service",
             "name": "http",
-            "version": "v1.7.0",
-            "instanceId": "shared"
+            "version": "v1.8.0"
         },
         {
             "type": "package",
@@ -17,30 +16,62 @@
     "configurationBuilder": "/configurationBuilder.js",
     "configuration": [
         {
-            "label": "Client Id",
+            "name": "authenticationMethod",
+            "label": "Authentication Method",
+            "required": true,
+            "defaultValue": "oAuth2",
+            "type": "buttonsGroup",
+            "typeOptions": {
+                "allowCustom": false,
+                "possibleValues": [
+                    {
+                        "label": "Service account",
+                        "name": "serviceAccount"
+                    },
+                    {
+                        "label": "OAuth 2.0",
+                        "name": "oAuth2"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "serviceAccountEmail",
+            "label": "Service account email",
+            "type": "text",
+            "description": "The email from service account created.",
+            "required": "config.authenticationMethod == 'serviceAccount'",
+            "visibility": "config.authenticationMethod == 'serviceAccount'"
+        },
+        {
+            "label": "Private key",
+            "name": "privateKey",
+            "description": "The private key associated to the service account.",
+            "required": "config.authenticationMethod == 'serviceAccount'",
+            "type": "password",
+            "visibility": "config.authenticationMethod == 'serviceAccount'"
+        },
+        {
+            "label": "Client ID",
             "name": "clientId",
             "description": "The ID for your client application registered with the API provider.",
             "required": "true",
-            "type": "text"
+            "type": "text",
+            "visibility": "config.authenticationMethod == 'oAuth2'"
         },
         {
-            "label": "Client Secret",
+            "label": "Client secret",
             "name": "clientSecret",
             "description": "The client secret given to you by the API provider",
-            "required": "true",
-            "type": "text"
+            "required": "config.authenticationMethod == 'oAuth2'",
+            "type": "text",
+            "visibility": "config.authenticationMethod == 'oAuth2'"
         },
         {
             "label": "Scope",
             "name": "scope",
             "description": "The scope of access you are requesting, which may include multiple space-separated values.",
             "required": "true",
-            "type": "text"
-        },
-        {
-            "label": "State",
-            "name": "state",
-            "description": "An opaque value to prevent cross-site request forgery.",
             "type": "text"
         },
         {
@@ -51,15 +82,8 @@
             "value": "config.AUTH_CALLBACK_URL+'/authCallback'"
         },
         {
-            "name": "webhooksUrl",
-            "label": "Webhooks URL",
-            "description": "The URL to configure in webhooks of your Google Drive App",
-            "type": "label",
-            "value": "config.WEBHOOK_URL"
-        },
-        {
             "name": "GOOGLESLIDES_API_BASE_URL",
-            "label": "Google Slides Api Url",
+            "label": "Google slides api url",
             "type": "label",
             "value": "https://slides.googleapis.com/v1"
         }
@@ -72,9 +96,9 @@
             "path": "/scripts/api.js"
         },
         {
-            "type": "flowStep",
-            "namespace": "apiCallGoogleSlides",
-            "path": "/flowSteps/apiCallGoogleSlides"
+            "type": "script",
+            "namespace": "utils",
+            "path": "/scripts/utils.js"
         }
     ]
 }
