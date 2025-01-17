@@ -5,8 +5,7 @@
         {
             "type": "service",
             "name": "http",
-            "version": "v1.7.0",
-            "instanceId": "shared"
+            "version": "v1.8.0"
         },
         {
             "type": "package",
@@ -26,7 +25,7 @@
                 "allowCustom": false,
                 "possibleValues": [
                     {
-                        "label": "Service Account",
+                        "label": "Service account",
                         "name": "serviceAccount"
                     },
                     {
@@ -38,7 +37,7 @@
         },
         {
             "name": "serviceAccountEmail",
-            "label": "Service Account Email",
+            "label": "Service account email",
             "type": "text",
             "description": "The email from service account created.",
             "required": "config.authenticationMethod == 'serviceAccount'",
@@ -53,7 +52,7 @@
             "visibility": "config.authenticationMethod == 'serviceAccount'"
         },
         {
-            "label": "Client Id",
+            "label": "Client ID",
             "name": "clientId",
             "description": "The ID for your client application registered with the API provider.",
             "required": "true",
@@ -61,7 +60,7 @@
             "visibility": "config.authenticationMethod == 'oAuth2'"
         },
         {
-            "label": "Client Secret",
+            "label": "Client secret",
             "name": "clientSecret",
             "description": "The client secret given to you by the API provider",
             "required": "config.authenticationMethod == 'oAuth2'",
@@ -84,7 +83,7 @@
         },
         {
             "name": "GOOGLESLIDES_API_BASE_URL",
-            "label": "Google Slides Api Url",
+            "label": "Google slides api url",
             "type": "label",
             "value": "https://slides.googleapis.com/v1"
         }
