@@ -21,7 +21,7 @@ by following these instructions:
 - Download the JSON file with the service account credentials to get the service account private key if using **Service Account** authentication.
 - For **OAuth 2.0** authentication, create OAuth 2.0 credentials and obtain the **Client ID** and **Client Secret**.
 
-#### Authentication Method
+#### Authentication method
 You can choose between two authentication methods for your application.
 
 **Name**: `authenticationMethod`
@@ -36,7 +36,7 @@ As explained above, this value comes from the credential file.
 **Type**: text
 **Mandatory**: true
 
-#### Private Key
+#### Private key
 
 As explained above, this value also comes from the credentials file.
 
@@ -52,7 +52,7 @@ The Client ID for your OAuth 2.0 application.
 **Type**: text
 **Mandatory**: true
 
-#### Client Secret
+#### Client secret
 The Client Secret given by the API provider.
 
 **Name**: `clientSecret`
@@ -64,16 +64,7 @@ The Client Secret given by the API provider.
 Note that the client must have access to the slides resources. If you try to access to a resource that the user does not own
 the request will result in a 404 or 403 unauthorized error.
 
-### Configuration Parameters
-Field names to use the parameters with configuration.
-
-**Client Id (clientId)** - Text<br>
-**Client Secret (clientSecret)** - Text<br>
-**Service Account Email (serviceAccountEmail)** - Text<br>
-**Private Key (privateKey)** - Text<br>
-**Scope (scope)** - Text
-
-### Storage value and Offline mode
+### Storage value and offline mode
 The Google Slides package allows the application runtime to request a refresh token. So when calling the UI service to be able to log in to the application
 
 ```javascript
